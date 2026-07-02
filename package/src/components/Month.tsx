@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Paper, Grid, Typography, makeStyles } from "@material-ui/core";
+import { Paper, Grid, Typography } from "@mui/material";
+import { makeStyles } from "tss-react/mui";
 import { getDate, isSameMonth, isToday, format, isWithinRange } from "date-fns";
 import {
   chunks,
@@ -12,12 +13,11 @@ import {
 import Header from "./Header";
 import Day from "./Day";
 
-// eslint-disable-next-line no-unused-vars
 import { NavigationAction, DateRange } from "../types";
 
 const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
   root: {
     width: 290,
   },
@@ -53,7 +53,7 @@ interface MonthProps {
 }
 
 const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const {
     helpers,
@@ -86,10 +86,9 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
         />
 
         <Grid
-          item
           container
           direction="row"
-          justify="space-between"
+          justifyContent="space-between"
           className={classes.weekDaysContainer}
         >
           {WEEK_DAYS.map((day) => (
@@ -100,15 +99,14 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
         </Grid>
 
         <Grid
-          item
           container
           direction="column"
-          justify="space-between"
+          justifyContent="space-between"
           className={classes.daysContainer}
         >
           {chunks(getDaysInMonth(date), 7).map((week, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Grid key={idx} container direction="row" justify="center">
+            <Grid key={idx} container direction="row" justifyContent="center">
               {week.map((day) => {
                 const isStart = isStartOfRange(dateRange, day);
                 const isEnd = isEndOfRange(dateRange, day);

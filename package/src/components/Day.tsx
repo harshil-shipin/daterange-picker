@@ -4,13 +4,12 @@ import * as React from 'react';
 import {
   IconButton,
   Typography,
-  makeStyles,
-  // eslint-disable-next-line no-unused-vars
-  Theme,
-} from '@material-ui/core';
+} from '@mui/material';
+import { type Theme } from '@mui/material/styles';
+import { makeStyles } from 'tss-react/mui';
 import { combine } from '../utils';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme: Theme) => ({
   leftBorderRadius: {
     borderRadius: '50% 0 0 50%',
   },
@@ -68,7 +67,7 @@ const Day: React.FunctionComponent<DayProps> = ({
   onHover,
   value,
 }: DayProps) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <div

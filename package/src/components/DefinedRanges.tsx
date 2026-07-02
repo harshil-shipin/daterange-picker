@@ -1,8 +1,7 @@
 import React from 'react';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List, ListItemButton, ListItemText } from '@mui/material';
 import { isSameDay } from 'date-fns';
 
-// eslint-disable-next-line no-unused-vars
 import { DefinedRange, DateRange } from '../types';
 
 type DefinedRangesProps = {
@@ -28,7 +27,7 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
   <List>
     {ranges.map((range, idx) => (
       // eslint-disable-next-line react/no-array-index-key
-      <ListItem button key={idx} onClick={() => setRange(range)}>
+      <ListItemButton key={idx} onClick={() => setRange(range)}>
         <ListItemText
           primaryTypographyProps={{
             variant: 'body2',
@@ -41,7 +40,7 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
         >
           {range.label}
         </ListItemText>
-      </ListItem>
+      </ListItemButton>
     ))}
   </List>
 );

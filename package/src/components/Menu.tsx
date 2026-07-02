@@ -4,27 +4,22 @@ import {
   Grid,
   Typography,
   Divider,
-  makeStyles,
-  // eslint-disable-next-line no-unused-vars
-  Theme,
-} from "@material-ui/core";
+} from "@mui/material";
+import { type Theme } from "@mui/material/styles";
+import { makeStyles } from "tss-react/mui";
 import { format, differenceInCalendarMonths } from "date-fns";
-import ArrowRightAlt from "@material-ui/icons/ArrowRightAlt";
+import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import Month from "./Month";
 import DefinedRanges from "./DefinedRanges";
 import {
-  // eslint-disable-next-line no-unused-vars
   DateRange,
-  // eslint-disable-next-line no-unused-vars
   DefinedRange,
-  // eslint-disable-next-line no-unused-vars
   Setter,
-  // eslint-disable-next-line no-unused-vars
   NavigationAction,
 } from "../types";
 import { MARKERS } from "../markers";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles()((theme: Theme) => ({
   header: {
     padding: "20px 70px",
   },
@@ -59,7 +54,7 @@ interface MenuProps {
 }
 
 const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const {
     ranges,
@@ -90,22 +85,22 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
       <Grid container direction="row" wrap="nowrap">
         <Grid>
           <Grid container className={classes.header} alignItems="center">
-            <Grid item className={classes.headerItem}>
+            <Grid className={classes.headerItem}>
               <Typography variant="subtitle1">
                 {startDate ? format(startDate, "MMMM DD, YYYY") : "Start Date"}
               </Typography>
             </Grid>
-            <Grid item className={classes.headerItem}>
+            <Grid className={classes.headerItem}>
               <ArrowRightAlt color="action" />
             </Grid>
-            <Grid item className={classes.headerItem}>
+            <Grid className={classes.headerItem}>
               <Typography variant="subtitle1">
                 {endDate ? format(endDate, "MMMM DD, YYYY") : "End Date"}
               </Typography>
             </Grid>
           </Grid>
           <Divider />
-          <Grid container direction="row" justify="center" wrap="nowrap">
+          <Grid container direction="row" justifyContent="center" wrap="nowrap">
             <Month
               {...commonProps}
               value={firstMonth}

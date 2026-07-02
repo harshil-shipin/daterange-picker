@@ -2,14 +2,13 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from 'tss-react/mui';
 
 import DateRangePicker from './DateRangePicker';
 
-// eslint-disable-next-line no-unused-vars
 import { DateRange, DefinedRange } from '../types';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
   dateRangePickerContainer: {
     position: 'relative',
   },
@@ -44,7 +43,7 @@ export interface DateRangePickerWrapperProps {
 const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (
   props: DateRangePickerWrapperProps,
 ) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const {
     closeOnClickOutside,

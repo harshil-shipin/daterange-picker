@@ -2,17 +2,18 @@
 
 import {
   Grid,
-  makeStyles,
   IconButton,
   Select,
   MenuItem,
-} from "@material-ui/core";
+} from "@mui/material";
+import { type SelectChangeEvent } from "@mui/material/Select";
+import { makeStyles } from "tss-react/mui";
 import React from "react";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import ChevronRight from "@mui/icons-material/ChevronRight";
 import { setMonth, getMonth, setYear, getYear } from "date-fns";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
   iconContainer: {
     padding: 5,
   },
@@ -63,19 +64,19 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   onClickNext,
   onClickPrevious,
 }: HeaderProps) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
-  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDate(setMonth(date, parseInt(event.target.value)));
+  const handleMonthChange = (event: SelectChangeEvent<number>) => {
+    setDate(setMonth(date, Number(event.target.value)));
   };
 
-  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDate(setYear(date, parseInt(event.target.value)));
+  const handleYearChange = (event: SelectChangeEvent<number>) => {
+    setDate(setYear(date, Number(event.target.value)));
   };
 
   return (
-    <Grid container justify="space-between" alignItems="center">
-      <Grid item className={classes.iconContainer}>
+    <Grid container justifyContent="space-between" alignItems="center">
+      <Grid className={classes.iconContainer}>
         <IconButton
           className={classes.icon}
           disabled={prevDisabled}
@@ -84,7 +85,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           <ChevronLeft color={prevDisabled ? "disabled" : "action"} />
         </IconButton>
       </Grid>
-      <Grid item>
+      <Grid>
         <Select
           value={getMonth(date)}
           onChange={handleMonthChange}
@@ -98,7 +99,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
         </Select>
       </Grid>
 
-      <Grid item>
+      <Grid>
         <Select
           value={getYear(date)}
           onChange={handleYearChange}
@@ -110,10 +111,8 @@ const Header: React.FunctionComponent<HeaderProps> = ({
             </MenuItem>
           ))}
         </Select>
-
-        {/* <Typography>{format(date, "MMMM YYYY")}</Typography> */}
       </Grid>
-      <Grid item className={classes.iconContainer}>
+      <Grid className={classes.iconContainer}>
         <IconButton
           className={classes.icon}
           disabled={nextDisabled}
