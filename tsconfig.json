@@ -16,7 +16,9 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["./package/src"],
   "exclude": ["node_modules", "build", "dist", "example", "rollup.config.js"]

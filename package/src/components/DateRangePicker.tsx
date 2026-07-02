@@ -19,15 +19,9 @@ import { DateRange, NavigationAction, DefinedRange } from '../types';
 import { getValidatedMonths, parseOptionalDate } from '../utils';
 
 import { defaultRanges } from '../defaults';
+import { MARKERS, Marker } from '../markers';
 
 import Menu from './Menu';
-
-type Marker = symbol;
-
-export const MARKERS: { [key: string]: Marker } = {
-  FIRST_MONTH: Symbol('firstMonth'),
-  SECOND_MONTH: Symbol('secondMonth'),
-};
 
 interface DateRangePickerProps {
   open: boolean;

@@ -22,7 +22,7 @@ import {
   // eslint-disable-next-line no-unused-vars
   NavigationAction,
 } from "../types";
-import { MARKERS } from "./DateRangePicker";
+import { MARKERS } from "../markers";
 
 const useStyles = makeStyles((theme: Theme) => ({
   header: {
