@@ -1,17 +1,6 @@
-import * as React from 'react';
-import {
-  Paper,
-  Grid,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import {
-  getDate,
-  isSameMonth,
-  isToday,
-  format,
-  isWithinRange,
-} from 'date-fns';
+import * as React from "react";
+import { Paper, Grid, Typography, makeStyles } from "@material-ui/core";
+import { getDate, isSameMonth, isToday, format, isWithinRange } from "date-fns";
 import {
   chunks,
   getDaysInMonth,
@@ -19,15 +8,14 @@ import {
   isEndOfRange,
   inDateRange,
   isRangeSameDay,
-} from '../utils';
-import Header from './Header';
-import Day from './Day';
-
+} from "../utils";
+import Header from "./Header";
+import Day from "./Day";
 
 // eslint-disable-next-line no-unused-vars
-import { NavigationAction, DateRange } from '../types';
+import { NavigationAction, DateRange } from "../types";
 
-const WEEK_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -89,15 +77,19 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
           setDate={setDate}
           nextDisabled={!forward}
           prevDisabled={!back}
-          onClickPrevious={() => handlers.onMonthNavigate(marker, NavigationAction.Previous)}
-          onClickNext={() => handlers.onMonthNavigate(marker, NavigationAction.Next)}
+          onClickPrevious={() =>
+            handlers.onMonthNavigate(marker, NavigationAction.Previous)
+          }
+          onClickNext={() =>
+            handlers.onMonthNavigate(marker, NavigationAction.Next)
+          }
         />
 
         <Grid
           item
           container
           direction="row"
-          justifyContent="space-between"
+          justify="space-between"
           className={classes.weekDaysContainer}
         >
           {WEEK_DAYS.map((day) => (
@@ -111,27 +103,28 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
           item
           container
           direction="column"
-          justifyContent="space-between"
+          justify="space-between"
           className={classes.daysContainer}
         >
           {chunks(getDaysInMonth(date), 7).map((week, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Grid key={idx} container direction="row" justifyContent="center">
+            <Grid key={idx} container direction="row" justify="center">
               {week.map((day) => {
                 const isStart = isStartOfRange(dateRange, day);
                 const isEnd = isEndOfRange(dateRange, day);
                 const isRangeOneDay = isRangeSameDay(dateRange);
-                const highlighted = inDateRange(dateRange, day) || helpers.inHoverRange(day);
+                const highlighted =
+                  inDateRange(dateRange, day) || helpers.inHoverRange(day);
 
                 return (
                   <Day
-                    key={format(day, 'MM-DD-YYYY')}
+                    key={format(day, "MM-DD-YYYY")}
                     filled={isStart || isEnd}
                     outlined={isToday(day)}
                     highlighted={highlighted && !isRangeOneDay}
                     disabled={
-                      !isSameMonth(date, day)
-                      || !isWithinRange(day, minDate, maxDate)
+                      !isSameMonth(date, day) ||
+                      !isWithinRange(day, minDate, maxDate)
                     }
                     startOfRange={isStart && !isRangeOneDay}
                     endOfRange={isEnd && !isRangeOneDay}

@@ -8,38 +8,32 @@ module.exports = {
     "import/resolver": {
       node: {
         paths: ["src"],
-        extensions: [
-          ".js",
-          ".ts",
-          ".jsx",
-          ".tsx",
-        ],
+        extensions: [".js", ".ts", ".jsx", ".tsx"],
       },
     },
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
+  extends: ["plugin:react/recommended", "airbnb"],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
   },
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
     ecmaVersion: 2018,
-    sourceType: 'module',
+    sourceType: "module",
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-  ],
+  plugins: ["react", "@typescript-eslint"],
   rules: {
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
+    "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
     "react/jsx-props-no-spreading": 0,
     "import/extensions": 0,
+    quotes: 0,
+    "object-curly-newline": 0,
+    "operator-linebreak": 0,
+    "implicit-arrow-linebreak": 0,
+    "react/jsx-curly-newline": 0,
   },
 };

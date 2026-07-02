@@ -6,16 +6,11 @@ import {
   IconButton,
   Select,
   MenuItem,
-} from '@material-ui/core';
-import React from 'react';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import {
-  setMonth,
-  getMonth,
-  setYear,
-  getYear,
-} from 'date-fns';
+} from "@material-ui/core";
+import React from "react";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import { setMonth, getMonth, setYear, getYear } from "date-fns";
 
 const useStyles = makeStyles(() => ({
   iconContainer: {
@@ -23,8 +18,8 @@ const useStyles = makeStyles(() => ({
   },
   icon: {
     padding: 10,
-    '&:hover': {
-      background: 'none',
+    "&:hover": {
+      background: "none",
     },
   },
 }));
@@ -39,18 +34,18 @@ interface HeaderProps {
 }
 
 const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'June',
-  'July',
-  'Aug',
-  'Sept',
-  'Oct',
-  'Nov',
-  'Dec',
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 const generateYears = (relativeTo: Date, count: number) => {
@@ -79,14 +74,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   };
 
   return (
-    <Grid container justifyContent="space-between" alignItems="center">
+    <Grid container justify="space-between" alignItems="center">
       <Grid item className={classes.iconContainer}>
         <IconButton
           className={classes.icon}
           disabled={prevDisabled}
           onClick={onClickPrevious}
         >
-          <ChevronLeft color={prevDisabled ? 'disabled' : 'action'} />
+          <ChevronLeft color={prevDisabled ? "disabled" : "action"} />
         </IconButton>
       </Grid>
       <Grid item>
@@ -119,8 +114,12 @@ const Header: React.FunctionComponent<HeaderProps> = ({
         {/* <Typography>{format(date, "MMMM YYYY")}</Typography> */}
       </Grid>
       <Grid item className={classes.iconContainer}>
-        <IconButton className={classes.icon} disabled={nextDisabled} onClick={onClickNext}>
-          <ChevronRight color={nextDisabled ? 'disabled' : 'action'} />
+        <IconButton
+          className={classes.icon}
+          disabled={nextDisabled}
+          onClick={onClickNext}
+        >
+          <ChevronRight color={nextDisabled ? "disabled" : "action"} />
         </IconButton>
       </Grid>
     </Grid>
