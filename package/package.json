@@ -1,79 +1,76 @@
 {
-	"name": "materialui-daterange-picker",
-	"version": "1.1.93",
-	"description": "A react date range picker implementation using @mui/material.",
-	"author": "jungsoft",
-	"license": "MIT",
-	"repository": "jungsoft/materialui-daterange-picker",
-	"main": "dist/index.js",
-	"module": "dist/index.es.js",
-	"jsnext:main": "dist/index.es.js",
-	"engines": {
-		"node": ">=18",
-		"npm": ">=9"
-	},
-	"scripts": {
-		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
-		"build": "rollup -c",
-		"copy_publish_files": "cp ../README.md .",
-		"prepublishOnly": "yarn run build && yarn run copy_publish_files"
-	},
-	"peerDependencies": {
-		"@emotion/react": "^11.0.0",
-		"@emotion/styled": "^11.0.0",
-		"@mui/material": "^7.0.0",
-		"react": "^18.0.0",
-		"react-dom": "^18.0.0"
-	},
-	"devDependencies": {
-		"@emotion/react": "^11.0.0",
-		"@emotion/styled": "^11.0.0",
-		"@mui/icons-material": "7.3.11",
-		"@mui/material": "7.3.11",
-		"@rollup/plugin-commonjs": "^28.0.0",
-		"@rollup/plugin-node-resolve": "^16.0.0",
-		"@rollup/plugin-typescript": "^12.0.0",
-		"@rollup/plugin-url": "^8.0.0",
-		"@types/react": "^18.0.0",
-		"@types/react-dom": "^18.0.0",
-		"@typescript-eslint/eslint-plugin": "^7.0.0",
-		"@typescript-eslint/parser": "^7.0.0",
-		"cross-env": "^7.0.0",
-		"eslint": "^8.57.0",
-		"eslint-config-airbnb": "^19.0.0",
-		"eslint-plugin-import": "^2.29.0",
-		"eslint-plugin-jsx-a11y": "^6.8.0",
-		"eslint-plugin-react": "^7.34.0",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"react": "^18.0.0",
-		"react-dom": "^18.0.0",
-		"react-is": "^18.0.0",
-		"rollup": "^3.29.0",
-		"rollup-plugin-peer-deps-external": "^2.2.0",
-		"tss-react": "^4.9.0",
+  "name": "materialui-daterange-picker",
+  "version": "1.1.93",
+  "description": "A react date range picker implementation using @mui/material.",
+  "author": "jungsoft",
+  "license": "MIT",
+  "repository": "jungsoft/materialui-daterange-picker",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
+  "scripts": {
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "build": "rollup -c",
+    "copy_publish_files": "cp ../README.md .",
+    "prepublishOnly": "yarn run build && yarn run copy_publish_files"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@mui/material": "^7.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@mui/icons-material": "7.3.11",
+    "@mui/material": "7.3.11",
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.0.0",
+    "@rollup/plugin-url": "^8.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "cross-env": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-is": "^18.0.0",
+    "rollup": "^3.29.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
 		"tslib": "^2.6.0",
-		"typescript": "^5.4.0"
-	},
+    "typescript": "^5.4.0"
+  },
 	"dependencies": {
-		"classnames": "^2.5.0",
-		"date-fns": "^1.30.1",
-		"tss-react": "^4.9.0"
+		"date-fns": "^1.30.1"
 	},
-	"resolutions": {
-		"react-is": "^18.0.0"
-	},
-	"keywords": [
-		"react",
-		"component",
-		"react-components",
-		"date-range",
-		"date",
-		"range",
-		"picker",
-		"material-design",
-		"material",
-		"typescript",
-		"npm",
-		"package"
-	]
+  "resolutions": {
+    "react-is": "^18.0.0"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "react-components",
+    "date-range",
+    "date",
+    "range",
+    "picker",
+    "material-design",
+    "material",
+    "typescript",
+    "npm",
+    "package"
+  ]
 }

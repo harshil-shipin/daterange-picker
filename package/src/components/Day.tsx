@@ -5,44 +5,7 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { type Theme } from '@mui/material/styles';
-import { makeStyles } from 'tss-react/mui';
-import { combine } from '../utils';
-
-const useStyles = makeStyles()((theme: Theme) => ({
-  leftBorderRadius: {
-    borderRadius: '50% 0 0 50%',
-  },
-  rightBorderRadius: {
-    borderRadius: '0 50% 50% 0',
-  },
-  buttonContainer: {
-    display: 'flex',
-  },
-  button: {
-    height: 36,
-    width: 36,
-    padding: 0,
-  },
-  buttonText: {
-    lineHeight: 1.6,
-  },
-  outlined: {
-    border: `1px solid ${theme.palette.primary.dark}`,
-  },
-  filled: {
-    '&:hover': {
-      backgroundColor: theme.palette.primary.dark,
-    },
-    backgroundColor: theme.palette.primary.dark,
-  },
-  highlighted: {
-    backgroundColor: theme.palette.action.hover,
-  },
-  contrast: {
-    color: theme.palette.primary.contrastText,
-  },
-}));
+import { styled } from '@mui/material/styles';
 
 interface DayProps {
   filled?: boolean;
@@ -56,6 +19,42 @@ interface DayProps {
   value: number | string;
 }
 
+const DayContainer = styled('div', {
+  shouldForwardProp: (prop) =>
+    !['startOfRange', 'endOfRange', 'highlighted', 'disabled'].includes(prop as string),
+})<{
+  startOfRange?: boolean;
+  endOfRange?: boolean;
+  highlighted?: boolean;
+  disabled?: boolean;
+}>(({ theme, startOfRange, endOfRange, highlighted, disabled }) => ({
+  display: 'flex',
+  ...(startOfRange && { borderRadius: '50% 0 0 50%' }),
+  ...(endOfRange && { borderRadius: '0 50% 50% 0' }),
+  ...(!disabled && highlighted && { backgroundColor: theme.palette.action.hover }),
+}));
+
+const DayButton = styled(IconButton, {
+  shouldForwardProp: (prop) =>
+    !['filled', 'outlined'].includes(prop as string),
+})<{
+  filled?: boolean;
+  outlined?: boolean;
+}>(({ theme, filled, outlined }) => ({
+  height: 36,
+  width: 36,
+  padding: 0,
+  ...(outlined && {
+    border: `1px solid ${theme.palette.primary.dark}`,
+  }),
+  ...(filled && {
+    backgroundColor: theme.palette.primary.dark,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  }),
+}));
+
 const Day: React.FunctionComponent<DayProps> = ({
   startOfRange,
   endOfRange,
@@ -66,41 +65,32 @@ const Day: React.FunctionComponent<DayProps> = ({
   onClick,
   onHover,
   value,
-}: DayProps) => {
-  const { classes } = useStyles();
-
-  return (
-    <div
-      className={combine(
-        classes.buttonContainer,
-        startOfRange && classes.leftBorderRadius,
-        endOfRange && classes.rightBorderRadius,
-        !disabled && highlighted && classes.highlighted,
-      )}
+}: DayProps) => (
+  <DayContainer
+    startOfRange={startOfRange}
+    endOfRange={endOfRange}
+    highlighted={highlighted}
+    disabled={disabled}
+  >
+    <DayButton
+      filled={!disabled && filled}
+      outlined={!disabled && outlined}
+      disabled={disabled}
+      onClick={onClick}
+      onMouseOver={onHover}
     >
-      <IconButton
-        className={combine(
-          classes.button,
-          !disabled && outlined && classes.outlined,
-          !disabled && filled && classes.filled,
-        )}
-        disabled={disabled}
-        onClick={onClick}
-        onMouseOver={onHover}
+      <Typography
+        color={!disabled ? 'textPrimary' : 'textSecondary'}
+        variant="body2"
+        sx={{
+          lineHeight: 1.6,
+          ...(!disabled && filled && { color: 'primary.contrastText' }),
+        }}
       >
-        <Typography
-          color={!disabled ? 'textPrimary' : 'textSecondary'}
-          className={combine(
-            classes.buttonText,
-            !disabled && filled && classes.contrast,
-          )}
-          variant="body2"
-        >
-          {value}
-        </Typography>
-      </IconButton>
-    </div>
-  );
-};
+        {value}
+      </Typography>
+    </DayButton>
+  </DayContainer>
+);
 
 export default Day;

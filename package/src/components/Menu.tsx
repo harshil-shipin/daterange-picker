@@ -5,8 +5,7 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
-import { type Theme } from "@mui/material/styles";
-import { makeStyles } from "tss-react/mui";
+import { styled } from "@mui/material/styles";
 import { format, differenceInCalendarMonths } from "date-fns";
 import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import Month from "./Month";
@@ -19,18 +18,18 @@ import {
 } from "../types";
 import { MARKERS } from "../markers";
 
-const useStyles = makeStyles()((theme: Theme) => ({
-  header: {
-    padding: "20px 70px",
-  },
-  headerItem: {
-    flex: 1,
-    textAlign: "center",
-  },
-  divider: {
-    borderLeft: `1px solid ${theme.palette.action.hover}`,
-    marginBottom: 20,
-  },
+const HeaderContainer = styled(Grid)({
+  padding: "20px 70px",
+});
+
+const HeaderItem = styled(Grid)({
+  flex: 1,
+  textAlign: "center",
+});
+
+const VerticalDivider = styled("div")(({ theme }) => ({
+  borderLeft: `1px solid ${theme.palette.action.hover}`,
+  marginBottom: 20,
 }));
 
 interface MenuProps {
@@ -54,8 +53,6 @@ interface MenuProps {
 }
 
 const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
-  const { classes } = useStyles();
-
   const {
     ranges,
     dateRange,
@@ -84,21 +81,21 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
     <Paper elevation={5} square>
       <Grid container direction="row" wrap="nowrap">
         <Grid>
-          <Grid container className={classes.header} alignItems="center">
-            <Grid className={classes.headerItem}>
+          <HeaderContainer container alignItems="center">
+            <HeaderItem>
               <Typography variant="subtitle1">
                 {startDate ? format(startDate, "MMMM DD, YYYY") : "Start Date"}
               </Typography>
-            </Grid>
-            <Grid className={classes.headerItem}>
+            </HeaderItem>
+            <HeaderItem>
               <ArrowRightAlt color="action" />
-            </Grid>
-            <Grid className={classes.headerItem}>
+            </HeaderItem>
+            <HeaderItem>
               <Typography variant="subtitle1">
                 {endDate ? format(endDate, "MMMM DD, YYYY") : "End Date"}
               </Typography>
-            </Grid>
-          </Grid>
+            </HeaderItem>
+          </HeaderContainer>
           <Divider />
           <Grid container direction="row" justifyContent="center" wrap="nowrap">
             <Month
@@ -108,7 +105,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
               navState={[true, canNavigateCloser]}
               marker={MARKERS.FIRST_MONTH}
             />
-            <div className={classes.divider} />
+            <VerticalDivider />
             <Month
               {...commonProps}
               value={secondMonth}
@@ -118,7 +115,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
             />
           </Grid>
         </Grid>
-        <div className={classes.divider} />
+        <VerticalDivider />
         <Grid>
           <DefinedRanges
             selectedRange={dateRange}

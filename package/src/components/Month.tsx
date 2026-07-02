@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Paper, Grid, Typography } from "@mui/material";
-import { makeStyles } from "tss-react/mui";
+import { styled } from "@mui/material/styles";
 import { getDate, isSameMonth, isToday, format, isWithinRange } from "date-fns";
 import {
   chunks,
@@ -17,22 +17,22 @@ import { NavigationAction, DateRange } from "../types";
 
 const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-const useStyles = makeStyles()(() => ({
-  root: {
-    width: 290,
-  },
-  weekDaysContainer: {
-    marginTop: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-  daysContainer: {
-    paddingLeft: 15,
-    paddingRight: 15,
-    marginTop: 15,
-    marginBottom: 20,
-  },
-}));
+const Root = styled(Paper)({
+  width: 290,
+});
+
+const WeekDaysContainer = styled(Grid)({
+  marginTop: 10,
+  paddingLeft: 30,
+  paddingRight: 30,
+});
+
+const DaysContainer = styled(Grid)({
+  paddingLeft: 15,
+  paddingRight: 15,
+  marginTop: 15,
+  marginBottom: 20,
+});
 
 interface MonthProps {
   value: Date;
@@ -53,8 +53,6 @@ interface MonthProps {
 }
 
 const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
-  const { classes } = useStyles();
-
   const {
     helpers,
     handlers,
@@ -70,7 +68,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
   const [back, forward] = props.navState;
 
   return (
-    <Paper square elevation={0} className={classes.root}>
+    <Root square elevation={0}>
       <Grid container>
         <Header
           date={date}
@@ -85,24 +83,22 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
           }
         />
 
-        <Grid
+        <WeekDaysContainer
           container
           direction="row"
           justifyContent="space-between"
-          className={classes.weekDaysContainer}
         >
           {WEEK_DAYS.map((day) => (
             <Typography color="textSecondary" key={day} variant="caption">
               {day}
             </Typography>
           ))}
-        </Grid>
+        </WeekDaysContainer>
 
-        <Grid
+        <DaysContainer
           container
           direction="column"
           justifyContent="space-between"
-          className={classes.daysContainer}
         >
           {chunks(getDaysInMonth(date), 7).map((week, idx) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -134,9 +130,9 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
               })}
             </Grid>
           ))}
-        </Grid>
+        </DaysContainer>
       </Grid>
-    </Paper>
+    </Root>
   );
 };
 

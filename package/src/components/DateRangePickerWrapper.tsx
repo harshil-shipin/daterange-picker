@@ -1,32 +1,31 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import * as React from 'react';
-import classNames from 'classnames';
-import { makeStyles } from 'tss-react/mui';
+import { styled } from '@mui/material/styles';
 
 import DateRangePicker from './DateRangePicker';
 
 import { DateRange, DefinedRange } from '../types';
 
-const useStyles = makeStyles()(() => ({
-  dateRangePickerContainer: {
-    position: 'relative',
-  },
-  dateRangePicker: {
-    position: 'relative',
-    zIndex: 1,
-  },
-  dateRangeBackdrop: {
-    position: 'fixed',
-    height: '100vh',
-    width: '100vw',
-    bottom: 0,
-    zIndex: 0,
-    right: 0,
-    left: 0,
-    top: 0,
-  },
-}));
+const Container = styled('div')({
+  position: 'relative',
+});
+
+const PickerWrapper = styled('div')({
+  position: 'relative',
+  zIndex: 1,
+});
+
+const Backdrop = styled('div')({
+  position: 'fixed',
+  height: '100vh',
+  width: '100vw',
+  bottom: 0,
+  zIndex: 0,
+  right: 0,
+  left: 0,
+  top: 0,
+});
 
 export interface DateRangePickerWrapperProps {
   open: boolean;
@@ -43,8 +42,6 @@ export interface DateRangePickerWrapperProps {
 const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (
   props: DateRangePickerWrapperProps,
 ) => {
-  const { classes } = useStyles();
-
   const {
     closeOnClickOutside,
     wrapperClassName,
@@ -62,24 +59,21 @@ const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProp
 
   const handleKeyPress = (event: any) => event?.key === 'Escape' && handleToggle();
 
-  const wrapperClasses = classNames(classes.dateRangePicker, wrapperClassName);
-
   return (
-    <div className={classes.dateRangePickerContainer}>
+    <Container>
       {
         open && (
-          <div
-            className={classes.dateRangeBackdrop}
+          <Backdrop
             onKeyPress={handleKeyPress}
             onClick={handleToggle}
           />
         )
       }
 
-      <div className={wrapperClasses}>
+      <PickerWrapper className={wrapperClassName}>
         <DateRangePicker {...props} />
-      </div>
-    </div>
+      </PickerWrapper>
+    </Container>
   );
 };
 

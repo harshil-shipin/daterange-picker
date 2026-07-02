@@ -7,23 +7,22 @@ import {
   MenuItem,
 } from "@mui/material";
 import { type SelectChangeEvent } from "@mui/material/Select";
-import { makeStyles } from "tss-react/mui";
+import { styled } from "@mui/material/styles";
 import React from "react";
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { setMonth, getMonth, setYear, getYear } from "date-fns";
 
-const useStyles = makeStyles()(() => ({
-  iconContainer: {
-    padding: 5,
+const IconContainer = styled("div")({
+  padding: 5,
+});
+
+const NavButton = styled(IconButton)({
+  padding: 10,
+  "&:hover": {
+    background: "none",
   },
-  icon: {
-    padding: 10,
-    "&:hover": {
-      background: "none",
-    },
-  },
-}));
+});
 
 interface HeaderProps {
   date: Date;
@@ -64,8 +63,6 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   onClickNext,
   onClickPrevious,
 }: HeaderProps) => {
-  const { classes } = useStyles();
-
   const handleMonthChange = (event: SelectChangeEvent<number>) => {
     setDate(setMonth(date, Number(event.target.value)));
   };
@@ -76,14 +73,15 @@ const Header: React.FunctionComponent<HeaderProps> = ({
 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
-      <Grid className={classes.iconContainer}>
-        <IconButton
-          className={classes.icon}
-          disabled={prevDisabled}
-          onClick={onClickPrevious}
-        >
-          <ChevronLeft color={prevDisabled ? "disabled" : "action"} />
-        </IconButton>
+      <Grid>
+        <IconContainer>
+          <NavButton
+            disabled={prevDisabled}
+            onClick={onClickPrevious}
+          >
+            <ChevronLeft color={prevDisabled ? "disabled" : "action"} />
+          </NavButton>
+        </IconContainer>
       </Grid>
       <Grid>
         <Select
@@ -112,14 +110,15 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           ))}
         </Select>
       </Grid>
-      <Grid className={classes.iconContainer}>
-        <IconButton
-          className={classes.icon}
-          disabled={nextDisabled}
-          onClick={onClickNext}
-        >
-          <ChevronRight color={nextDisabled ? "disabled" : "action"} />
-        </IconButton>
+      <Grid>
+        <IconContainer>
+          <NavButton
+            disabled={nextDisabled}
+            onClick={onClickNext}
+          >
+            <ChevronRight color={nextDisabled ? "disabled" : "action"} />
+          </NavButton>
+        </IconContainer>
       </Grid>
     </Grid>
   );
