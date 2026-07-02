@@ -84,7 +84,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
           <HeaderContainer container alignItems="center">
             <HeaderItem>
               <Typography variant="subtitle1">
-                {startDate ? format(startDate, "MMMM DD, YYYY") : "Start Date"}
+                {startDate ? format(startDate, "MMMM dd, yyyy") : "Start Date"}
               </Typography>
             </HeaderItem>
             <HeaderItem>
@@ -92,7 +92,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
             </HeaderItem>
             <HeaderItem>
               <Typography variant="subtitle1">
-                {endDate ? format(endDate, "MMMM DD, YYYY") : "End Date"}
+                {endDate ? format(endDate, "MMMM dd, yyyy") : "End Date"}
               </Typography>
             </HeaderItem>
           </HeaderContainer>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Paper, Grid, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { getDate, isSameMonth, isToday, format, isWithinRange } from "date-fns";
+import { getDate, isSameMonth, isToday, format, isWithinInterval } from "date-fns";
 import {
   chunks,
   getDaysInMonth,
@@ -112,13 +112,13 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
 
                 return (
                   <Day
-                    key={format(day, "MM-DD-YYYY")}
+                    key={format(day, "MM-dd-yyyy")}
                     filled={isStart || isEnd}
                     outlined={isToday(day)}
                     highlighted={highlighted && !isRangeOneDay}
                     disabled={
                       !isSameMonth(date, day) ||
-                      !isWithinRange(day, minDate, maxDate)
+                      !isWithinInterval(day, { start: minDate, end: maxDate })
                     }
                     startOfRange={isStart && !isRangeOneDay}
                     endOfRange={isEnd && !isRangeOneDay}
