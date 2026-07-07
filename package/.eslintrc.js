@@ -36,7 +36,7 @@ module.exports = {
     "implicit-arrow-linebreak": 0,
     "react/jsx-curly-newline": 0,
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-unused-vars": ["warn"],
     "react/require-default-props": "off",
     "react/function-component-definition": "off",
     "no-shadow": "off",

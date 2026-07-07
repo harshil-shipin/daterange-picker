@@ -1,14 +1,26 @@
-import React from 'react';
-import { List, ListItemButton, ListItemText } from '@mui/material';
-import { isSameDay } from 'date-fns';
+import React from "react";
+import { List, ListItemButton, ListItemText } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { isSameDay } from "date-fns";
 
-import { DefinedRange, DateRange } from '../types';
+import { DefinedRange, DateRange } from "../types";
+import { getDateRangePickerPalette } from "../theme";
 
 type DefinedRangesProps = {
   setRange: (range: DateRange) => void;
   selectedRange: DateRange;
   ranges: DefinedRange[];
 };
+
+const RangeListItem = styled(ListItemButton)(({ theme }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    "&:hover": {
+      backgroundColor: colors.hoverBackground,
+    },
+  };
+});
 
 const isSameRange = (first: DateRange, second: DateRange) => {
   const { startDate: fStart, endDate: fEnd } = first;
@@ -25,23 +37,33 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
   selectedRange,
 }: DefinedRangesProps) => (
   <List>
-    {ranges.map((range, idx) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <ListItemButton key={idx} onClick={() => setRange(range)}>
-        <ListItemText
-          primaryTypographyProps={{
-            variant: 'body2',
-            style: {
-              fontWeight: isSameRange(range, selectedRange)
-                ? 'bold'
-                : 'normal',
-            },
-          }}
-        >
-          {range.label}
-        </ListItemText>
-      </ListItemButton>
-    ))}
+    {ranges.map((range, idx) => {
+      const selected = isSameRange(range, selectedRange);
+
+      return (
+        // eslint-disable-next-line react/no-array-index-key
+        <RangeListItem key={idx} onClick={() => setRange(range)}>
+          <ListItemText
+            slotProps={{
+              primary: {
+                variant: "body2",
+                sx: (theme) => {
+                  const colors = getDateRangePickerPalette(theme);
+                  return {
+                    fontWeight: selected ? "bold" : "normal",
+                    color: selected
+                      ? colors.rangeListTextSelected
+                      : colors.rangeListText,
+                  };
+                },
+              },
+            }}
+          >
+            {range.label}
+          </ListItemText>
+        </RangeListItem>
+      );
+    })}
   </List>
 );
 

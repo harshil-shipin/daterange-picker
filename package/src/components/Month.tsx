@@ -16,6 +16,7 @@ import {
   inDateRange,
   isRangeSameDay,
 } from "../utils";
+import { getDateRangePickerPalette } from "../theme";
 import Header from "./Header";
 import Day from "./Day";
 
@@ -43,6 +44,18 @@ const DaysContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
+});
+
+const WeekDayLabel = styled(Typography)(({ theme }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    width: 36,
+    fontSize: 12,
+    display: "inline-block",
+    textAlign: "center",
+    color: colors.weekDayText,
+  };
 });
 
 interface MonthProps {
@@ -96,14 +109,9 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
 
         <WeekDaysContainer>
           {WEEK_DAYS.map((day) => (
-            <Typography
-              color="textSecondary"
-              key={day}
-              variant="caption"
-              sx={{ width: 36, display: "inline-block", textAlign: "center" }}
-            >
+            <WeekDayLabel key={day} variant="caption">
               {day}
-            </Typography>
+            </WeekDayLabel>
           ))}
         </WeekDaysContainer>
 

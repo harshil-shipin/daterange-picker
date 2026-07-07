@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 
-import * as React from 'react';
-import {
-  IconButton,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import * as React from "react";
+import { IconButton, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { getDateRangePickerPalette } from "../theme";
 
 interface DayProps {
   filled?: boolean;
@@ -19,45 +17,77 @@ interface DayProps {
   value: number | string;
 }
 
-const DayContainer = styled('div', {
+const DayContainer = styled("div", {
   shouldForwardProp: (prop) =>
-    !['startOfRange', 'endOfRange', 'highlighted', 'disabled'].includes(prop as string),
+    !["startOfRange", "endOfRange", "highlighted", "disabled"].includes(
+      prop as string,
+    ),
 })<{
   startOfRange?: boolean;
   endOfRange?: boolean;
   highlighted?: boolean;
   disabled?: boolean;
-}>(({ theme, startOfRange, endOfRange, highlighted, disabled }) => ({
-  display: 'flex',
-  ...(startOfRange && { borderRadius: '50% 0 0 50%' }),
-  ...(endOfRange && { borderRadius: '0 50% 50% 0' }),
-  ...(!disabled && highlighted && { backgroundColor: theme.palette.action.hover }),
-}));
+}>(({ theme, startOfRange, endOfRange, highlighted, disabled }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    display: "flex",
+    ...(startOfRange && { borderRadius: "50% 0 0 50%" }),
+    ...(endOfRange && { borderRadius: "0 50% 50% 0" }),
+    ...(!disabled && highlighted && {
+      backgroundColor: colors.hoverBackground,
+    }),
+  };
+});
 
 const DayButton = styled(IconButton, {
-  shouldForwardProp: (prop) =>
-    !['filled', 'outlined'].includes(prop as string),
+  shouldForwardProp: (prop) => !["filled", "outlined"].includes(prop as string),
 })<{
   filled?: boolean;
   outlined?: boolean;
-}>(({ theme, filled, outlined }) => ({
-  height: 36,
-  width: 36,
-  padding: 0,
-  borderRadius: '50%',
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  ...(outlined && {
-    border: `1px solid ${theme.palette.primary.dark}`,
-  }),
-  ...(filled && {
-    backgroundColor: theme.palette.primary.dark,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.dark,
+}>(({ theme, filled, outlined }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    height: 36,
+    width: 36,
+    padding: 0,
+    borderRadius: "50%",
+    "&:hover": {
+      backgroundColor: colors.hoverBackground,
     },
-  }),
-}));
+    ...(outlined && {
+      border: `1px solid ${colors.dayAccent}`,
+    }),
+    ...(filled && {
+      backgroundColor: colors.dayAccent,
+      "&:hover": {
+        backgroundColor: colors.dayAccent,
+      },
+    }),
+    "&:disabled": {
+      color: colors.dayDisabledColor,
+    },
+  };
+});
+
+const DayText = styled(Typography, {
+  shouldForwardProp: (prop) => !["filled", "disabled"].includes(prop as string),
+})<{
+  filled?: boolean;
+  disabled?: boolean;
+}>(({ theme, filled, disabled }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    lineHeight: 1.6,
+    color: (() => {
+      if (disabled) return colors.dayDisabledText;
+      if (filled) return colors.daySelectedText;
+      return colors.dayText;
+    })(),
+  };
+});
 
 const Day: React.FunctionComponent<DayProps> = ({
   startOfRange,
@@ -83,16 +113,9 @@ const Day: React.FunctionComponent<DayProps> = ({
       onClick={onClick}
       onMouseOver={onHover}
     >
-      <Typography
-        color={!disabled ? 'textPrimary' : 'textSecondary'}
-        variant="body2"
-        sx={{
-          lineHeight: 1.6,
-          ...(!disabled && filled && { color: 'primary.contrastText' }),
-        }}
-      >
+      <DayText variant="body2" filled={!disabled && filled} disabled={disabled}>
         {value}
-      </Typography>
+      </DayText>
     </DayButton>
   </DayContainer>
 );

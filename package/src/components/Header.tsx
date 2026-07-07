@@ -7,22 +7,38 @@ import {
   MenuItem,
 } from "@mui/material";
 import { type SelectChangeEvent } from "@mui/material/Select";
-import { styled } from "@mui/material/styles";
+import { styled, type Theme } from "@mui/material/styles";
 import React from "react";
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { setMonth, getMonth, setYear, getYear } from "date-fns";
+import { getDateRangePickerPalette } from "../theme";
 
 const IconContainer = styled("div")({
   padding: 5,
 });
 
-const NavButton = styled(IconButton)({
-  padding: 10,
-  "&:hover": {
-    background: "none",
-  },
+const NavButton = styled(IconButton)(({ theme }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    padding: 10,
+    "&:hover": {
+      backgroundColor: colors.hoverBackground,
+    },
+  };
 });
+
+const getSelectSx = (theme: Theme) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    color: colors.headerDateText,
+    "&:after": {
+      display: "none",
+    },
+  };
+};
 
 interface HeaderProps {
   date: Date;
@@ -79,7 +95,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
             disabled={prevDisabled}
             onClick={onClickPrevious}
           >
-            <ChevronLeft color={prevDisabled ? "disabled" : "action"} />
+            <ChevronLeft
+              sx={(theme) => {
+                const colors = getDateRangePickerPalette(theme);
+                return {
+                  color: prevDisabled ? colors.iconDisabled : colors.icon,
+                };
+              }}
+            />
           </NavButton>
         </IconContainer>
       </Grid>
@@ -89,6 +112,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           value={getMonth(date)}
           onChange={handleMonthChange}
           MenuProps={{ disablePortal: true }}
+          sx={getSelectSx}
         >
           {MONTHS.map((month, idx) => (
             <MenuItem key={month} value={idx}>
@@ -104,6 +128,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           value={getYear(date)}
           onChange={handleYearChange}
           MenuProps={{ disablePortal: true }}
+          sx={getSelectSx}
         >
           {generateYears(date, 30).map((year) => (
             <MenuItem key={year} value={year}>
@@ -118,7 +143,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
             disabled={nextDisabled}
             onClick={onClickNext}
           >
-            <ChevronRight color={nextDisabled ? "disabled" : "action"} />
+            <ChevronRight
+              sx={(theme) => {
+                const colors = getDateRangePickerPalette(theme);
+                return {
+                  color: nextDisabled ? colors.iconDisabled : colors.icon,
+                };
+              }}
+            />
           </NavButton>
         </IconContainer>
       </Grid>

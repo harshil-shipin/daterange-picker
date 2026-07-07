@@ -17,6 +17,7 @@ import {
   NavigationAction,
 } from "../types";
 import { MARKERS } from "../markers";
+import { getDateRangePickerPalette } from "../theme";
 
 const HeaderContainer = styled(Grid)({
   padding: "20px 70px",
@@ -27,10 +28,22 @@ const HeaderItem = styled(Grid)({
   textAlign: "center",
 });
 
-const VerticalDivider = styled("div")(({ theme }) => ({
-  borderLeft: `1px solid ${theme.palette.action.hover}`,
-  marginBottom: 20,
-}));
+const VerticalDivider = styled("div")(({ theme }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    borderLeft: `1px solid ${colors.divider}`,
+    marginBottom: 20,
+  };
+});
+
+const HeaderDateText = styled(Typography)(({ theme }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    color: colors.headerDateText,
+  };
+});
 
 interface MenuProps {
   dateRange: DateRange;
@@ -83,17 +96,22 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
         <Grid>
           <HeaderContainer container alignItems="center">
             <HeaderItem>
-              <Typography variant="subtitle1">
+              <HeaderDateText variant="subtitle1">
                 {startDate ? format(startDate, "MMMM dd, yyyy") : "Start Date"}
-              </Typography>
+              </HeaderDateText>
             </HeaderItem>
             <HeaderItem>
-              <ArrowRightAlt color="action" />
+              <ArrowRightAlt
+                sx={(theme) => {
+                  const colors = getDateRangePickerPalette(theme);
+                  return { color: colors.icon };
+                }}
+              />
             </HeaderItem>
             <HeaderItem>
-              <Typography variant="subtitle1">
+              <HeaderDateText variant="subtitle1">
                 {endDate ? format(endDate, "MMMM dd, yyyy") : "End Date"}
-              </Typography>
+              </HeaderDateText>
             </HeaderItem>
           </HeaderContainer>
           <Divider />
