@@ -7,6 +7,7 @@ import {
   defaultDateRangePickerPalette,
   type DateRangePickerPalette,
 } from './theme';
+import type { DateRangePickerWrapperProps } from './components/DateRangePickerWrapper';
 
 export {
   DateRangePickerExporter as DateRangePicker,
@@ -16,4 +17,4 @@ export {
   defaultDateRangePickerPalette,
 };
 
-export type { DateRangePickerPalette };
+export type { DateRangePickerPalette, DateRangePickerWrapperProps };

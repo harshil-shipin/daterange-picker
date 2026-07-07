@@ -1,80 +1,64 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+import * as React from "react";
+import { Popover } from "@mui/material";
 
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import DateRangePicker from "./DateRangePicker";
 
-import DateRangePicker from './DateRangePicker';
-
-import { DateRange, DefinedRange } from '../types';
-
-const Container = styled('div')({
-  position: 'relative',
-});
-
-const PickerWrapper = styled('div')({
-  position: 'relative',
-  zIndex: 1,
-});
-
-const Backdrop = styled('div')({
-  position: 'fixed',
-  height: '100vh',
-  width: '100vw',
-  bottom: 0,
-  zIndex: 0,
-  right: 0,
-  left: 0,
-  top: 0,
-});
+import { DateRange, DefinedRange } from "../types";
 
 export interface DateRangePickerWrapperProps {
-  open: boolean;
-  toggle: () => void;
-  initialDateRange?: DateRange;
+  value: DateRange;
   definedRanges?: DefinedRange[];
   minDate?: Date | string;
   maxDate?: Date | string;
   onChange: (dateRange: DateRange) => void;
-  closeOnClickOutside?: boolean;
+  labelElement: (props: {
+    open: boolean;
+    onClick: (e: React.MouseEvent<HTMLElement>) => void;
+  }) => React.ReactNode;
   wrapperClassName?: string;
 }
 
-const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (
-  props: DateRangePickerWrapperProps,
-) => {
-  const {
-    closeOnClickOutside,
-    wrapperClassName,
-    toggle,
-    open,
-  } = props;
+const DateRangePickerWrapper: React.FunctionComponent<
+  DateRangePickerWrapperProps
+> = (props: DateRangePickerWrapperProps) => {
+  const { labelElement, ...pickerProps } = props;
 
-  const handleToggle = () => {
-    if (closeOnClickOutside === false) {
-      return;
-    }
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
 
-    toggle();
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
   };
 
-  const handleKeyPress = (event: any) => event?.key === 'Escape' && handleToggle();
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <Container className="container" data-testid="container">
-      {
-        open && (
-          <Backdrop
-            className="backdrop"
-            onKeyPress={handleKeyPress}
-            onClick={handleToggle}
-          />
-        )
-      }
-
-      <PickerWrapper className={`wrapper ${wrapperClassName || ''}`}>
-        <DateRangePicker {...props} />
-      </PickerWrapper>
-    </Container>
+    <>
+      {labelElement({ open, onClick: handleClick })}
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        slotProps={{
+          paper: {
+            className: "daterange-picker-popover",
+            style: {
+              borderRadius: 10,
+              backgroundColor: "#FFF",
+              border: `1px solid #E5E7EB`,
+              boxShadow: "0px 4px 12px 0px rgba(0, 0, 0, 0.25)",
+              marginTop: 4,
+            },
+          },
+        }}
+      >
+        <DateRangePicker {...pickerProps} onClose={handleClose} />
+      </Popover>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { List, ListItemButton, ListItemText } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { isSameDay } from "date-fns";
 
 import { DefinedRange, DateRange } from "../types";
@@ -10,6 +10,7 @@ type DefinedRangesProps = {
   setRange: (range: DateRange) => void;
   selectedRange: DateRange;
   ranges: DefinedRange[];
+  onClose?: () => void;
 };
 
 const RangeListItem = styled(ListItemButton)(({ theme }) => {
@@ -31,49 +32,60 @@ const isSameRange = (first: DateRange, second: DateRange) => {
   return false;
 };
 
-const toTestId = (label: string) =>
-  label.toLowerCase().replace(/\s+/g, "-");
+const toTestId = (label: string) => label.toLowerCase().replace(/\s+/g, "-");
 
 const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
   ranges,
   setRange,
   selectedRange,
-}: DefinedRangesProps) => (
-  <List className="defined-ranges">
-    {ranges.map((range, idx) => {
-      const selected = isSameRange(range, selectedRange);
+  onClose,
+}: DefinedRangesProps) => {
+  const theme = useTheme();
+  const colors = getDateRangePickerPalette(theme);
 
-      return (
-        // eslint-disable-next-line react/no-array-index-key
-        <RangeListItem
-          key={idx}
-          className="range-item"
-          data-testid={`range-${toTestId(range.label)}`}
-          onClick={() => setRange(range)}
-        >
-          <ListItemText
-            className="range-text"
-            slotProps={{
-              primary: {
-                variant: "body2",
-                sx: (theme) => {
-                  const colors = getDateRangePickerPalette(theme);
-                  return {
+  return (
+    <List className="defined-ranges">
+      {ranges.map((range, idx) => {
+        const selected = isSameRange(range, selectedRange);
+
+        return (
+          // eslint-disable-next-line react/no-array-index-key
+          <RangeListItem
+            key={idx}
+            className="range-item"
+            data-testid={`range-${toTestId(range.label)}`}
+            sx={{
+              backgroundColor: selected
+                ? colors.hoverBackground
+                : "transparent",
+            }}
+            onClick={() => {
+              setRange(range);
+              onClose?.();
+            }}
+          >
+            <ListItemText
+              className="range-text"
+              slotProps={{
+                primary: {
+                  variant: "body2",
+                  sx: {
+                    paddingRight: "36px",
                     fontWeight: selected ? "bold" : "normal",
                     color: selected
                       ? colors.rangeListTextSelected
                       : colors.rangeListText,
-                  };
+                  },
                 },
-              },
-            }}
-          >
-            {range.label}
-          </ListItemText>
-        </RangeListItem>
-      );
-    })}
-  </List>
-);
+              }}
+            >
+              {range.label}
+            </ListItemText>
+          </RangeListItem>
+        );
+      })}
+    </List>
+  );
+};
 
 export default DefinedRanges;

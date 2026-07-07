@@ -10,13 +10,12 @@ import { setMonth, getMonth, setYear, getYear } from "date-fns";
 import { getDateRangePickerPalette } from "../theme";
 
 const MENU_PROPS: SelectProps["MenuProps"] = {
-  disablePortal: true,
   anchorOrigin: { vertical: "bottom", horizontal: "left" },
   transformOrigin: { vertical: "top", horizontal: "left" },
   slotProps: {
     paper: {
       className: "select-menu",
-      sx: { maxHeight: 500, overflow: "auto" },
+      sx: { maxHeight: 400, overflow: "auto" },
     },
   },
 };

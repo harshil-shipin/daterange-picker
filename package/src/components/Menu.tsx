@@ -55,6 +55,7 @@ interface MenuProps {
   setFirstMonth: Setter<Date>;
   setSecondMonth: Setter<Date>;
   setDateRange: Setter<DateRange>;
+  onClose?: () => void;
   helpers: {
     inHoverRange: (day: Date) => boolean;
   };
@@ -76,6 +77,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
     secondMonth,
     setSecondMonth,
     setDateRange,
+    onClose,
     helpers,
     handlers,
   } = props;
@@ -164,6 +166,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
             selectedRange={dateRange}
             ranges={ranges}
             setRange={setDateRange}
+            onClose={onClose}
           />
         </Grid>
       </Grid>
