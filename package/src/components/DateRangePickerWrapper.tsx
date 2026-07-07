@@ -6,7 +6,7 @@ import DateRangePicker from "./DateRangePicker";
 import { DateRange, DefinedRange } from "../types";
 
 export interface DateRangePickerWrapperProps {
-  value: DateRange;
+  initialDateRange?: DateRange;
   definedRanges?: DefinedRange[];
   minDate?: Date | string;
   maxDate?: Date | string;
