@@ -53,7 +53,7 @@ const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
           <RangeListItem
             key={idx}
             className="range-item"
-            data-testid={`range-${toTestId(range.label)}`}
+            data-testid={`datepicker-range-${toTestId(range.label)}`}
             sx={{
               backgroundColor: selected
                 ? colors.hoverBackground

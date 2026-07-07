@@ -92,7 +92,6 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
 
   // eslint-disable-next-line react/destructuring-assignment
   const [back, forward] = props.navState;
-  const monthName = format(date, "MMMM").toLowerCase();
 
   return (
     <Root
@@ -155,7 +154,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
                     onClick={() => handlers.onDayClick(day)}
                     onHover={() => handlers.onDayHover(day)}
                     value={dayNum}
-                    testId={`${position}-${monthName}-${dayNum}`}
+                    testId={`${position}-${format(day, "MMMM").toLowerCase()}-${dayNum}`}
                   />
                 );
               })}
