@@ -14,6 +14,18 @@ import ChevronRight from "@mui/icons-material/ChevronRight";
 import { setMonth, getMonth, setYear, getYear } from "date-fns";
 import { getDateRangePickerPalette } from "../theme";
 
+const MENU_PROPS = {
+  disablePortal: true,
+  anchorOrigin: { vertical: "bottom" as const, horizontal: "left" as const },
+  transformOrigin: { vertical: "top" as const, horizontal: "left" as const },
+  slotProps: {
+    paper: {
+      className: "select-menu",
+      sx: { maxHeight: 500, overflow: "auto" },
+    },
+  },
+};
+
 const IconContainer = styled("div")({
   padding: 5,
 });
@@ -47,6 +59,7 @@ interface HeaderProps {
   prevDisabled: boolean;
   onClickNext: () => void;
   onClickPrevious: () => void;
+  position: "start" | "end";
 }
 
 const MONTHS = [
@@ -68,7 +81,7 @@ const generateYears = (relativeTo: Date, count: number) => {
   const half = Math.floor(count / 2);
   return Array(count)
     .fill(0)
-    .map((_y, i) => relativeTo.getFullYear() - half + i); // TODO: make part of the state
+    .map((_y, i) => relativeTo.getFullYear() - half + i);
 };
 
 const Header: React.FunctionComponent<HeaderProps> = ({
@@ -78,6 +91,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   prevDisabled,
   onClickNext,
   onClickPrevious,
+  position,
 }: HeaderProps) => {
   const handleMonthChange = (event: SelectChangeEvent<number>) => {
     setDate(setMonth(date, Number(event.target.value)));
@@ -87,11 +101,21 @@ const Header: React.FunctionComponent<HeaderProps> = ({
     setDate(setYear(date, Number(event.target.value)));
   };
 
+  const monthId = `${position}-month`;
+  const yearId = `${position}-year`;
+
   return (
-    <Grid container justifyContent="space-between" alignItems="center">
+    <Grid
+      container
+      justifyContent="space-between"
+      alignItems="center"
+      className="header"
+    >
       <Grid>
         <IconContainer>
           <NavButton
+            className="nav-button nav-prev"
+            data-testid={`${position}-nav-prev`}
             disabled={prevDisabled}
             onClick={onClickPrevious}
           >
@@ -108,14 +132,22 @@ const Header: React.FunctionComponent<HeaderProps> = ({
       </Grid>
       <Grid>
         <Select
+          id={monthId}
+          name={monthId}
           variant="standard"
           value={getMonth(date)}
           onChange={handleMonthChange}
-          MenuProps={{ disablePortal: true }}
+          MenuProps={MENU_PROPS}
           sx={getSelectSx}
+          className="select month-select"
+          data-testid={monthId}
         >
           {MONTHS.map((month, idx) => (
-            <MenuItem key={month} value={idx}>
+            <MenuItem
+              key={month}
+              value={idx}
+              data-testid={`${monthId}-${month.toLowerCase()}`}
+            >
               {month}
             </MenuItem>
           ))}
@@ -124,14 +156,22 @@ const Header: React.FunctionComponent<HeaderProps> = ({
 
       <Grid>
         <Select
+          id={yearId}
+          name={yearId}
           variant="standard"
           value={getYear(date)}
           onChange={handleYearChange}
-          MenuProps={{ disablePortal: true }}
+          MenuProps={MENU_PROPS}
           sx={getSelectSx}
+          className="select year-select"
+          data-testid={yearId}
         >
           {generateYears(date, 30).map((year) => (
-            <MenuItem key={year} value={year}>
+            <MenuItem
+              key={year}
+              value={year}
+              data-testid={`${yearId}-${year}`}
+            >
               {year}
             </MenuItem>
           ))}
@@ -140,6 +180,8 @@ const Header: React.FunctionComponent<HeaderProps> = ({
       <Grid>
         <IconContainer>
           <NavButton
+            className="nav-button nav-next"
+            data-testid={`${position}-nav-next`}
             disabled={nextDisabled}
             onClick={onClickNext}
           >

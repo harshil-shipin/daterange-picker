@@ -15,6 +15,7 @@ interface DayProps {
   onClick?: () => void;
   onHover?: () => void;
   value: number | string;
+  testId?: string;
 }
 
 const DayContainer = styled("div", {
@@ -99,21 +100,30 @@ const Day: React.FunctionComponent<DayProps> = ({
   onClick,
   onHover,
   value,
+  testId,
 }: DayProps) => (
   <DayContainer
+    className="day-container"
     startOfRange={startOfRange}
     endOfRange={endOfRange}
     highlighted={highlighted}
     disabled={disabled}
   >
     <DayButton
+      className="day-button"
+      data-testid={testId}
       filled={!disabled && filled}
       outlined={!disabled && outlined}
       disabled={disabled}
       onClick={onClick}
       onMouseOver={onHover}
     >
-      <DayText variant="body2" filled={!disabled && filled} disabled={disabled}>
+      <DayText
+        className="day-text"
+        variant="body2"
+        filled={!disabled && filled}
+        disabled={disabled}
+      >
         {value}
       </DayText>
     </DayButton>

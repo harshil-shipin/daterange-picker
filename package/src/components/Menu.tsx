@@ -91,16 +91,29 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
     handlers,
   };
   return (
-    <Paper elevation={5} square>
-      <Grid container direction="row" wrap="nowrap">
+    <Paper elevation={5} square className="popover">
+      <Grid
+        container
+        direction="row"
+        wrap="nowrap"
+        className="popover-content"
+      >
         <Grid>
-          <HeaderContainer container alignItems="center">
-            <HeaderItem>
-              <HeaderDateText variant="subtitle1">
+          <HeaderContainer
+            container
+            alignItems="center"
+            className="date-header"
+          >
+            <HeaderItem className="date-header-item">
+              <HeaderDateText
+                variant="subtitle1"
+                className="start-date-text"
+                data-testid="start-date-display"
+              >
                 {startDate ? format(startDate, "MMMM dd, yyyy") : "Start Date"}
               </HeaderDateText>
             </HeaderItem>
-            <HeaderItem>
+            <HeaderItem className="date-header-item arrow-icon">
               <ArrowRightAlt
                 sx={(theme) => {
                   const colors = getDateRangePickerPalette(theme);
@@ -108,33 +121,45 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
                 }}
               />
             </HeaderItem>
-            <HeaderItem>
-              <HeaderDateText variant="subtitle1">
+            <HeaderItem className="date-header-item">
+              <HeaderDateText
+                variant="subtitle1"
+                className="end-date-text"
+                data-testid="end-date-display"
+              >
                 {endDate ? format(endDate, "MMMM dd, yyyy") : "End Date"}
               </HeaderDateText>
             </HeaderItem>
           </HeaderContainer>
-          <Divider />
-          <Grid container direction="row" justifyContent="center" wrap="nowrap">
+          <Divider className="divider" />
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            wrap="nowrap"
+            className="calendars"
+          >
             <Month
               {...commonProps}
               value={firstMonth}
               setValue={setFirstMonth}
               navState={[true, canNavigateCloser]}
               marker={MARKERS.FIRST_MONTH}
+              position="start"
             />
-            <VerticalDivider />
+            <VerticalDivider className="vertical-divider" />
             <Month
               {...commonProps}
               value={secondMonth}
               setValue={setSecondMonth}
               navState={[canNavigateCloser, true]}
               marker={MARKERS.SECOND_MONTH}
+              position="end"
             />
           </Grid>
         </Grid>
-        <VerticalDivider />
-        <Grid>
+        <VerticalDivider className="vertical-divider" />
+        <Grid className="defined-ranges-panel">
           <DefinedRanges
             selectedRange={dateRange}
             ranges={ranges}

@@ -66,6 +66,7 @@ interface MonthProps {
   maxDate: Date;
   navState: [boolean, boolean];
   setValue: (date: Date) => void;
+  position: "start" | "end";
   helpers: {
     inHoverRange: (day: Date) => boolean;
   };
@@ -86,19 +87,26 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     setValue: setDate,
     minDate,
     maxDate,
+    position,
   } = props;
 
   // eslint-disable-next-line react/destructuring-assignment
   const [back, forward] = props.navState;
+  const monthName = format(date, "MMMM").toLowerCase();
 
   return (
-    <Root square elevation={0}>
+    <Root
+      square
+      elevation={0}
+      className={`month-panel month-panel-${position}`}
+    >
       <Box>
         <Header
           date={date}
           setDate={setDate}
           nextDisabled={!forward}
           prevDisabled={!back}
+          position={position}
           onClickPrevious={() =>
             handlers.onMonthNavigate(marker, NavigationAction.Previous)
           }
@@ -107,24 +115,34 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
           }
         />
 
-        <WeekDaysContainer>
+        <WeekDaysContainer className="weekdays">
           {WEEK_DAYS.map((day) => (
-            <WeekDayLabel key={day} variant="caption">
+            <WeekDayLabel
+              key={day}
+              variant="caption"
+              className="weekday-label"
+            >
               {day}
             </WeekDayLabel>
           ))}
         </WeekDaysContainer>
 
-        <DaysContainer>
+        <DaysContainer className="days-grid">
           {chunks(getDaysInMonth(date), 7).map((week, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Box key={idx} display="flex" justifyContent="center">
+            <Box
+              key={idx}
+              display="flex"
+              justifyContent="center"
+              className="week-row"
+            >
               {week.map((day) => {
                 const isStart = isStartOfRange(dateRange, day);
                 const isEnd = isEndOfRange(dateRange, day);
                 const isRangeOneDay = isRangeSameDay(dateRange);
                 const highlighted =
                   inDateRange(dateRange, day) || helpers.inHoverRange(day);
+                const dayNum = getDate(day);
 
                 return (
                   <Day
@@ -140,7 +158,8 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
                     endOfRange={isEnd && !isRangeOneDay}
                     onClick={() => handlers.onDayClick(day)}
                     onHover={() => handlers.onDayHover(day)}
-                    value={getDate(day)}
+                    value={dayNum}
+                    testId={`${position}-${monthName}-${dayNum}`}
                   />
                 );
               })}

@@ -31,19 +31,28 @@ const isSameRange = (first: DateRange, second: DateRange) => {
   return false;
 };
 
+const toTestId = (label: string) =>
+  label.toLowerCase().replace(/\s+/g, "-");
+
 const DefinedRanges: React.FunctionComponent<DefinedRangesProps> = ({
   ranges,
   setRange,
   selectedRange,
 }: DefinedRangesProps) => (
-  <List>
+  <List className="defined-ranges">
     {ranges.map((range, idx) => {
       const selected = isSameRange(range, selectedRange);
 
       return (
         // eslint-disable-next-line react/no-array-index-key
-        <RangeListItem key={idx} onClick={() => setRange(range)}>
+        <RangeListItem
+          key={idx}
+          className="range-item"
+          data-testid={`range-${toTestId(range.label)}`}
+          onClick={() => setRange(range)}
+        >
           <ListItemText
+            className="range-text"
             slotProps={{
               primary: {
                 variant: "body2",

@@ -60,17 +60,18 @@ const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProp
   const handleKeyPress = (event: any) => event?.key === 'Escape' && handleToggle();
 
   return (
-    <Container>
+    <Container className="container" data-testid="container">
       {
         open && (
           <Backdrop
+            className="backdrop"
             onKeyPress={handleKeyPress}
             onClick={handleToggle}
           />
         )
       }
 
-      <PickerWrapper className={wrapperClassName}>
+      <PickerWrapper className={`wrapper ${wrapperClassName || ''}`}>
         <DateRangePicker {...props} />
       </PickerWrapper>
     </Container>

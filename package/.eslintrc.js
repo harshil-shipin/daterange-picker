@@ -42,5 +42,6 @@ module.exports = {
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "import/no-extraneous-dependencies": "off",
+    "react/no-array-index-key": "off",
   },
 };
