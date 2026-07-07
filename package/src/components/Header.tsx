@@ -41,6 +41,7 @@ const getSelectSx = (theme: Theme) => {
 
   return {
     color: colors.headerDateText,
+    fontSize: "14px",
     "&:after": {
       display: "none",
     },
@@ -144,6 +145,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
             <MenuItem
               key={month}
               value={idx}
+              sx={{ fontSize: "14px" }}
               data-testid={`${monthId}-${month.toLowerCase()}`}
             >
               {month}
@@ -170,7 +172,12 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           }}
         >
           {YEARS.map((year) => (
-            <MenuItem key={year} value={year} data-testid={`${yearId}-${year}`}>
+            <MenuItem
+              key={year}
+              value={year}
+              sx={{ fontSize: "14px" }}
+              data-testid={`${yearId}-${year}`}
+            >
               {year}
             </MenuItem>
           ))}
