@@ -44,6 +44,10 @@ const DayButton = styled(IconButton, {
   height: 36,
   width: 36,
   padding: 0,
+  borderRadius: '50%',
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
   ...(outlined && {
     border: `1px solid ${theme.palette.primary.dark}`,
   }),

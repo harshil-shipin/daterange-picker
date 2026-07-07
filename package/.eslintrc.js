@@ -37,5 +37,10 @@ module.exports = {
     "react/jsx-curly-newline": 0,
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
+    "react/require-default-props": "off",
+    "react/function-component-definition": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "import/no-extraneous-dependencies": "off",
   },
 };
