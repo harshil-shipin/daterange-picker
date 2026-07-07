@@ -10,11 +10,12 @@ import { setMonth, getMonth, setYear, getYear } from "date-fns";
 import { getDateRangePickerPalette } from "../theme";
 
 const MENU_PROPS: SelectProps["MenuProps"] = {
-  anchorOrigin: { vertical: "bottom", horizontal: "left" },
-  transformOrigin: { vertical: "top", horizontal: "left" },
+  disableAutoFocusItem: true,
+  anchorOrigin: { vertical: "bottom", horizontal: "center" },
+  transformOrigin: { vertical: "top", horizontal: "center" },
   slotProps: {
     paper: {
-      className: "select-menu",
+      className: "select-menu custom-scrollbar",
       sx: { maxHeight: 400, overflow: "auto" },
     },
   },
@@ -71,12 +72,10 @@ const MONTHS = [
   "Dec",
 ];
 
-const generateYears = (relativeTo: Date, count: number) => {
-  const half = Math.floor(count / 2);
-  return Array(count)
-    .fill(0)
-    .map((_y, i) => relativeTo.getFullYear() - half + i);
-};
+const YEARS = Array.from(
+  { length: new Date().getFullYear() - 2021 + 1 },
+  (_, i) => 2021 + i,
+);
 
 const Header: React.FunctionComponent<HeaderProps> = ({
   date,
@@ -133,8 +132,13 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           onChange={handleMonthChange}
           MenuProps={MENU_PROPS}
           sx={getSelectSx}
-          className="select month-select"
-          data-testid={monthId}
+          className="month-select"
+          slotProps={{
+            input: {
+              // @ts-ignore
+              "data-testid": `${monthId}-select`,
+            },
+          }}
         >
           {MONTHS.map((month, idx) => (
             <MenuItem
@@ -158,9 +162,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           MenuProps={MENU_PROPS}
           sx={getSelectSx}
           className="select year-select"
-          data-testid={yearId}
+          slotProps={{
+            input: {
+              // @ts-ignore
+              "data-testid": `${yearId}-select`,
+            },
+          }}
         >
-          {generateYears(date, 30).map((year) => (
+          {YEARS.map((year) => (
             <MenuItem key={year} value={year} data-testid={`${yearId}-${year}`}>
               {year}
             </MenuItem>
