@@ -1,6 +1,6 @@
 {
   "name": "@shipin/daterange-picker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A react date range picker implementation using @mui/material.",
   "author": "jungsoft",
   "license": "MIT",

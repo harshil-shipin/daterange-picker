@@ -78,6 +78,11 @@ const YEARS = Array.from(
   (_, i) => 2021 + i,
 );
 
+const START_YEAR = YEARS[0];
+const now = new Date();
+const CURRENT_YEAR = now.getFullYear();
+const CURRENT_MONTH = now.getMonth();
+
 const Header: React.FunctionComponent<HeaderProps> = ({
   date,
   setDate,
@@ -87,6 +92,12 @@ const Header: React.FunctionComponent<HeaderProps> = ({
   onClickPrevious,
   position,
 }: HeaderProps) => {
+  const year = getYear(date);
+  const month = getMonth(date);
+  const atMinBound = year === START_YEAR && month === 0;
+  const atMaxBound = year === CURRENT_YEAR && month >= CURRENT_MONTH;
+  const isPrevDisabled = prevDisabled || atMinBound;
+  const isNextDisabled = nextDisabled || atMaxBound;
   const handleMonthChange = (event: SelectChangeEvent<number>) => {
     setDate(setMonth(date, Number(event.target.value)));
   };
@@ -110,14 +121,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           <NavButton
             className="nav-button nav-prev"
             data-testid={`${position}-nav-prev`}
-            disabled={prevDisabled}
+            disabled={isPrevDisabled}
             onClick={onClickPrevious}
           >
             <ChevronLeft
               sx={(theme) => {
                 const colors = getDateRangePickerPalette(theme);
                 return {
-                  color: prevDisabled ? colors.iconDisabled : colors.icon,
+                  color: isPrevDisabled ? colors.iconDisabled : colors.icon,
                 };
               }}
             />
@@ -141,14 +152,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
             },
           }}
         >
-          {MONTHS.map((month, idx) => (
+          {MONTHS.map((currentMonth, idx) => (
             <MenuItem
-              key={month}
+              key={currentMonth}
               value={idx}
               sx={{ fontSize: "14px" }}
-              data-testid={`${monthId}-${month.toLowerCase()}`}
+              data-testid={`${monthId}-${currentMonth.toLowerCase()}`}
             >
-              {month}
+              {currentMonth}
             </MenuItem>
           ))}
         </Select>
@@ -171,14 +182,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
             },
           }}
         >
-          {YEARS.map((year) => (
+          {YEARS.map((currentYear) => (
             <MenuItem
-              key={year}
-              value={year}
+              key={currentYear}
+              value={currentYear}
               sx={{ fontSize: "14px" }}
-              data-testid={`${yearId}-${year}`}
+              data-testid={`${yearId}-${currentYear}`}
             >
-              {year}
+              {currentYear}
             </MenuItem>
           ))}
         </Select>
@@ -188,14 +199,14 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           <NavButton
             className="nav-button nav-next"
             data-testid={`${position}-nav-next`}
-            disabled={nextDisabled}
+            disabled={isNextDisabled}
             onClick={onClickNext}
           >
             <ChevronRight
               sx={(theme) => {
                 const colors = getDateRangePickerPalette(theme);
                 return {
-                  color: nextDisabled ? colors.iconDisabled : colors.icon,
+                  color: isNextDisabled ? colors.iconDisabled : colors.icon,
                 };
               }}
             />
