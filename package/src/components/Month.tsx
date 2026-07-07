@@ -117,11 +117,7 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
 
         <WeekDaysContainer className="weekdays">
           {WEEK_DAYS.map((day) => (
-            <WeekDayLabel
-              key={day}
-              variant="caption"
-              className="weekday-label"
-            >
+            <WeekDayLabel key={day} variant="caption" className="weekday-label">
               {day}
             </WeekDayLabel>
           ))}

@@ -1,12 +1,7 @@
 /* eslint-disable radix */
 
-import {
-  Grid,
-  IconButton,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { type SelectChangeEvent } from "@mui/material/Select";
+import { Grid, IconButton, Select, MenuItem } from "@mui/material";
+import { SelectProps, type SelectChangeEvent } from "@mui/material/Select";
 import { styled, type Theme } from "@mui/material/styles";
 import React from "react";
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
@@ -14,10 +9,10 @@ import ChevronRight from "@mui/icons-material/ChevronRight";
 import { setMonth, getMonth, setYear, getYear } from "date-fns";
 import { getDateRangePickerPalette } from "../theme";
 
-const MENU_PROPS = {
+const MENU_PROPS: SelectProps["MenuProps"] = {
   disablePortal: true,
-  anchorOrigin: { vertical: "bottom" as const, horizontal: "left" as const },
-  transformOrigin: { vertical: "top" as const, horizontal: "left" as const },
+  anchorOrigin: { vertical: "bottom", horizontal: "left" },
+  transformOrigin: { vertical: "top", horizontal: "left" },
   slotProps: {
     paper: {
       className: "select-menu",
@@ -167,11 +162,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({
           data-testid={yearId}
         >
           {generateYears(date, 30).map((year) => (
-            <MenuItem
-              key={year}
-              value={year}
-              data-testid={`${yearId}-${year}`}
-            >
+            <MenuItem key={year} value={year} data-testid={`${yearId}-${year}`}>
               {year}
             </MenuItem>
           ))}

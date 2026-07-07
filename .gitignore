@@ -26,3 +26,4 @@ yarn-error.log*
 # NPM README file
 package/README.md
 *.tgz
+link.sh

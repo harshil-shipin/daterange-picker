@@ -98,7 +98,7 @@ const Menu: React.FunctionComponent<MenuProps> = (props: MenuProps) => {
         wrap="nowrap"
         className="popover-content"
       >
-        <Grid>
+        <Grid sx={{ flexShrink: 0 }}>
           <HeaderContainer
             container
             alignItems="center"
