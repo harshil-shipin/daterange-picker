@@ -6,10 +6,10 @@ import {
   isBefore,
   addDays,
   isSameDay,
-  isWithinRange,
+  isWithinInterval,
   isSameMonth,
   addMonths,
-  parse,
+  parseISO,
   isValid,
   min,
   max,
@@ -18,16 +18,12 @@ import {
 // eslint-disable-next-line no-unused-vars
 import { DateRange } from './types';
 
-export const identity = <T>(x: T) => x;
-
 export const chunks = <T>(array: ReadonlyArray<T>, size: number): T[][] => (
   Array.from(
     { length: Math.ceil(array.length / size) },
     (_v, i) => array.slice(i * size, i * size + size),
   )
 );
-
-export const combine = (...args: any[]): string => args.filter(identity).join(' ');
 
 // Date
 export const getDaysInMonth = (date: Date) => {
@@ -52,7 +48,7 @@ export const isEndOfRange = ({ endDate }: DateRange, day: Date) => (
 export const inDateRange = ({ startDate, endDate }: DateRange, day: Date) => (
   startDate
   && endDate
-  && (isWithinRange(day, startDate, endDate)
+  && (isWithinInterval(day, { start: startDate, end: endDate })
   || isSameDay(day, startDate)
   || isSameDay(day, endDate))
 ) as boolean;
@@ -68,8 +64,13 @@ type Falsy = false | null | undefined | 0 | '';
 
 export const parseOptionalDate = (date: Date | string | Falsy, defaultValue: Date) => {
   if (date) {
-    const parsed = parse(date);
+    if (date instanceof Date) {
+      return isValid(date) ? date : defaultValue;
+    }
+    const parsed = parseISO(date);
     if (isValid(parsed)) return parsed;
+    const fallback = new Date(date);
+    if (isValid(fallback)) return fallback;
   }
   return defaultValue;
 };
@@ -77,8 +78,8 @@ export const parseOptionalDate = (date: Date | string | Falsy, defaultValue: Dat
 export const getValidatedMonths = (range: DateRange, minDate: Date, maxDate: Date) => {
   const { startDate, endDate } = range;
   if (startDate && endDate) {
-    const newStart = max(startDate, minDate);
-    const newEnd = min(endDate, maxDate);
+    const newStart = max([startDate, minDate]);
+    const newEnd = min([endDate, maxDate]);
 
     return [newStart, isSameMonth(newStart, newEnd) ? addMonths(newStart, 1) : newEnd];
   }

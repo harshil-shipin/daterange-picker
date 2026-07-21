@@ -1,17 +1,13 @@
-import * as React from 'react';
-import {
-  Paper,
-  Grid,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import * as React from "react";
+import { Paper, Typography, Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import {
   getDate,
   isSameMonth,
   isToday,
   format,
-  isWithinRange,
-} from 'date-fns';
+  isWithinInterval,
+} from "date-fns";
 import {
   chunks,
   getDaysInMonth,
@@ -19,32 +15,48 @@ import {
   isEndOfRange,
   inDateRange,
   isRangeSameDay,
-} from '../utils';
-import Header from './Header';
-import Day from './Day';
+} from "../utils";
+import { getDateRangePickerPalette } from "../theme";
+import Header from "./Header";
+import Day from "./Day";
 
+import { NavigationAction, DateRange } from "../types";
 
-// eslint-disable-next-line no-unused-vars
-import { NavigationAction, DateRange } from '../types';
+const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-const WEEK_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const Root = styled(Paper)({
+  width: 290,
+});
 
-const useStyles = makeStyles(() => ({
-  root: {
-    width: 290,
-  },
-  weekDaysContainer: {
-    marginTop: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-  daysContainer: {
-    paddingLeft: 15,
-    paddingRight: 15,
-    marginTop: 15,
-    marginBottom: 20,
-  },
-}));
+const WeekDaysContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  marginTop: 10,
+  paddingLeft: 15,
+  paddingRight: 15,
+});
+
+const DaysContainer = styled(Box)({
+  paddingLeft: 15,
+  paddingRight: 15,
+  marginTop: 15,
+  marginBottom: 20,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+});
+
+const WeekDayLabel = styled(Typography)(({ theme }) => {
+  const colors = getDateRangePickerPalette(theme);
+
+  return {
+    width: 36,
+    fontSize: 12,
+    display: "inline-block",
+    textAlign: "center",
+    color: colors.weekDayText,
+  };
+});
 
 interface MonthProps {
   value: Date;
@@ -54,6 +66,7 @@ interface MonthProps {
   maxDate: Date;
   navState: [boolean, boolean];
   setValue: (date: Date) => void;
+  position: "start" | "end";
   helpers: {
     inHoverRange: (day: Date) => boolean;
   };
@@ -65,8 +78,6 @@ interface MonthProps {
 }
 
 const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
-  const classes = useStyles();
-
   const {
     helpers,
     handlers,
@@ -76,76 +87,82 @@ const Month: React.FunctionComponent<MonthProps> = (props: MonthProps) => {
     setValue: setDate,
     minDate,
     maxDate,
+    position,
   } = props;
 
   // eslint-disable-next-line react/destructuring-assignment
   const [back, forward] = props.navState;
 
   return (
-    <Paper square elevation={0} className={classes.root}>
-      <Grid container>
+    <Root
+      square
+      elevation={0}
+      className={`month-panel month-panel-${position}`}
+    >
+      <Box>
         <Header
           date={date}
           setDate={setDate}
           nextDisabled={!forward}
           prevDisabled={!back}
-          onClickPrevious={() => handlers.onMonthNavigate(marker, NavigationAction.Previous)}
-          onClickNext={() => handlers.onMonthNavigate(marker, NavigationAction.Next)}
+          position={position}
+          onClickPrevious={() =>
+            handlers.onMonthNavigate(marker, NavigationAction.Previous)
+          }
+          onClickNext={() =>
+            handlers.onMonthNavigate(marker, NavigationAction.Next)
+          }
         />
 
-        <Grid
-          item
-          container
-          direction="row"
-          justifyContent="space-between"
-          className={classes.weekDaysContainer}
-        >
+        <WeekDaysContainer className="weekdays">
           {WEEK_DAYS.map((day) => (
-            <Typography color="textSecondary" key={day} variant="caption">
+            <WeekDayLabel key={day} variant="caption" className="weekday-label">
               {day}
-            </Typography>
+            </WeekDayLabel>
           ))}
-        </Grid>
+        </WeekDaysContainer>
 
-        <Grid
-          item
-          container
-          direction="column"
-          justifyContent="space-between"
-          className={classes.daysContainer}
-        >
+        <DaysContainer className="days-grid">
           {chunks(getDaysInMonth(date), 7).map((week, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Grid key={idx} container direction="row" justifyContent="center">
+            <Box
+              key={idx}
+              display="flex"
+              justifyContent="center"
+              className="week-row"
+            >
               {week.map((day) => {
                 const isStart = isStartOfRange(dateRange, day);
                 const isEnd = isEndOfRange(dateRange, day);
                 const isRangeOneDay = isRangeSameDay(dateRange);
-                const highlighted = inDateRange(dateRange, day) || helpers.inHoverRange(day);
+                const highlighted =
+                  inDateRange(dateRange, day) || helpers.inHoverRange(day);
+                const dayNum = getDate(day);
 
                 return (
                   <Day
-                    key={format(day, 'MM-DD-YYYY')}
+                    key={format(day, "MM-dd-yyyy")}
                     filled={isStart || isEnd}
                     outlined={isToday(day)}
                     highlighted={highlighted && !isRangeOneDay}
                     disabled={
-                      !isSameMonth(date, day)
-                      || !isWithinRange(day, minDate, maxDate)
+                      !isSameMonth(date, day) ||
+                      !isWithinInterval(day, { start: minDate, end: maxDate })
                     }
                     startOfRange={isStart && !isRangeOneDay}
                     endOfRange={isEnd && !isRangeOneDay}
                     onClick={() => handlers.onDayClick(day)}
                     onHover={() => handlers.onDayHover(day)}
-                    value={getDate(day)}
+                    value={dayNum}
+                    testId={`${position}-${format(day, "MMMM").toLowerCase()}-${dayNum}`}
                   />
                 );
               })}
-            </Grid>
+            </Box>
           ))}
-        </Grid>
-      </Grid>
-    </Paper>
+        </DaysContainer>
+      </Box>
+    </Root>
   );
 };
 

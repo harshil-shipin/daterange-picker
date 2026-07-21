@@ -1,11 +1,11 @@
-import typescript from 'rollup-plugin-typescript2';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
+import { readFileSync } from 'fs';
+import typescript from '@rollup/plugin-typescript';
+import commonjs from '@rollup/plugin-commonjs';
 import external from 'rollup-plugin-peer-deps-external';
-import resolve from 'rollup-plugin-node-resolve';
-import url from 'rollup-plugin-url';
+import resolve from '@rollup/plugin-node-resolve';
+import url from '@rollup/plugin-url';
 
-import pkg from './package.json';
+const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
 
 export default {
   input: 'src/index.ts',
@@ -24,13 +24,14 @@ export default {
   plugins: [
     external(),
     url({ exclude: ['**/*.svg'] }),
-    babel({
-      exclude: 'node_modules/**',
+    resolve({
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
-    resolve(),
     typescript({
-      rollupCommonJSResolveHack: true,
-      clean: true,
+      tsconfig: '../tsconfig.json',
+      declaration: true,
+      declarationDir: './dist',
+      outDir: './dist',
     }),
     commonjs(),
   ],

@@ -1,86 +1,64 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+import * as React from "react";
+import { Popover } from "@mui/material";
 
-import * as React from 'react';
-import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core';
+import DateRangePicker from "./DateRangePicker";
 
-import DateRangePicker from './DateRangePicker';
-
-// eslint-disable-next-line no-unused-vars
-import { DateRange, DefinedRange } from '../types';
-
-const useStyles = makeStyles(() => ({
-  dateRangePickerContainer: {
-    position: 'relative',
-  },
-  dateRangePicker: {
-    position: 'relative',
-    zIndex: 1,
-  },
-  dateRangeBackdrop: {
-    position: 'fixed',
-    height: '100vh',
-    width: '100vw',
-    bottom: 0,
-    zIndex: 0,
-    right: 0,
-    left: 0,
-    top: 0,
-  },
-}));
+import { DateRange, DefinedRange } from "../types";
 
 export interface DateRangePickerWrapperProps {
-  open: boolean;
-  toggle: () => void;
   initialDateRange?: DateRange;
   definedRanges?: DefinedRange[];
   minDate?: Date | string;
   maxDate?: Date | string;
   onChange: (dateRange: DateRange) => void;
-  closeOnClickOutside?: boolean;
+  labelElement: (props: {
+    open: boolean;
+    onClick: (e: React.MouseEvent<HTMLElement>) => void;
+  }) => React.ReactNode;
   wrapperClassName?: string;
 }
 
-const DateRangePickerWrapper: React.FunctionComponent<DateRangePickerWrapperProps> = (
-  props: DateRangePickerWrapperProps,
-) => {
-  const classes = useStyles();
+const DateRangePickerWrapper: React.FunctionComponent<
+  DateRangePickerWrapperProps
+> = (props: DateRangePickerWrapperProps) => {
+  const { labelElement, ...pickerProps } = props;
 
-  const {
-    closeOnClickOutside,
-    wrapperClassName,
-    toggle,
-    open,
-  } = props;
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
 
-  const handleToggle = () => {
-    if (closeOnClickOutside === false) {
-      return;
-    }
-
-    toggle();
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
   };
 
-  const handleKeyPress = (event: any) => event?.key === 'Escape' && handleToggle();
-
-  const wrapperClasses = classNames(classes.dateRangePicker, wrapperClassName);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <div className={classes.dateRangePickerContainer}>
-      {
-        open && (
-          <div
-            className={classes.dateRangeBackdrop}
-            onKeyPress={handleKeyPress}
-            onClick={handleToggle}
-          />
-        )
-      }
-
-      <div className={wrapperClasses}>
-        <DateRangePicker {...props} />
-      </div>
-    </div>
+    <>
+      {labelElement({ open, onClick: handleClick })}
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        slotProps={{
+          paper: {
+            className: "daterange-picker-popover",
+            style: {
+              borderRadius: 10,
+              backgroundColor: "#FFF",
+              border: `1px solid #E5E7EB`,
+              boxShadow: "0px 4px 12px 0px rgba(0, 0, 0, 0.25)",
+              marginTop: 4,
+            },
+          },
+        }}
+      >
+        <DateRangePicker {...pickerProps} onClose={handleClose} />
+      </Popover>
+    </>
   );
 };
 

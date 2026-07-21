@@ -1,41 +1,35 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-param-reassign */
 
-import * as React from 'react';
+import * as React from "react";
 import {
   addMonths,
   isSameDay,
-  isWithinRange,
+  isWithinInterval,
   isAfter,
   isBefore,
   isSameMonth,
   addYears,
   max,
   min,
-} from 'date-fns';
+} from "date-fns";
 
 // eslint-disable-next-line no-unused-vars
-import { DateRange, NavigationAction, DefinedRange } from '../types';
-import { getValidatedMonths, parseOptionalDate } from '../utils';
+import { DateRange, NavigationAction, DefinedRange } from "../types";
+import { getValidatedMonths, parseOptionalDate } from "../utils";
 
-import { defaultRanges } from '../defaults';
+import { defaultRanges } from "../defaults";
+import { MARKERS, Marker } from "../markers";
 
-import Menu from './Menu';
-
-type Marker = symbol;
-
-export const MARKERS: { [key: string]: Marker } = {
-  FIRST_MONTH: Symbol('firstMonth'),
-  SECOND_MONTH: Symbol('secondMonth'),
-};
+import Menu from "./Menu";
 
 interface DateRangePickerProps {
-  open: boolean;
   initialDateRange?: DateRange;
   definedRanges?: DefinedRange[];
   minDate?: Date | string;
   maxDate?: Date | string;
   onChange: (dateRange: DateRange) => void;
+  onClose?: () => void;
 }
 
 const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
@@ -44,8 +38,8 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
   const today = new Date();
 
   const {
-    open,
     onChange,
+    onClose,
     initialDateRange,
     minDate,
     maxDate,
@@ -60,16 +54,19 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     maxDateValid,
   );
 
-  const [dateRange, setDateRange] = React.useState<DateRange>({ ...initialDateRange });
+  const [dateRange, setDateRange] = React.useState<DateRange>({
+    ...initialDateRange,
+  });
   const [hoverDay, setHoverDay] = React.useState<Date>();
-  const [firstMonth, setFirstMonth] = React.useState<Date>(intialFirstMonth || today);
+  const [firstMonth, setFirstMonth] = React.useState<Date>(
+    intialFirstMonth || today,
+  );
   const [secondMonth, setSecondMonth] = React.useState<Date>(
     initialSecondMonth || addMonths(firstMonth, 1),
   );
 
   const { startDate, endDate } = dateRange;
 
-  // handlers
   const setFirstMonthValidated = (date: Date) => {
     if (isBefore(date, secondMonth)) {
       setFirstMonth(date);
@@ -86,14 +83,16 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     let { startDate: newStart, endDate: newEnd } = range;
 
     if (newStart && newEnd) {
-      range.startDate = newStart = max(newStart, minDateValid);
-      range.endDate = newEnd = min(newEnd, maxDateValid);
+      range.startDate = newStart = max([newStart, minDateValid]);
+      range.endDate = newEnd = min([newEnd, maxDateValid]);
 
       setDateRange(range);
       onChange(range);
 
       setFirstMonth(newStart);
-      setSecondMonth(isSameMonth(newStart, newEnd) ? addMonths(newStart, 1) : newEnd);
+      setSecondMonth(
+        isSameMonth(newStart, newEnd) ? addMonths(newStart, 1) : newEnd,
+      );
     } else {
       const emptyRange = {};
 
@@ -110,6 +109,7 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
       const newRange = { startDate, endDate: day };
       onChange(newRange);
       setDateRange(newRange);
+      onClose?.();
     } else {
       setDateRange({ startDate: day, endDate: undefined });
     }
@@ -134,12 +134,15 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     }
   };
 
-  // helpers
-  const inHoverRange = (day: Date) => (startDate
-      && !endDate
-      && hoverDay
-      && isAfter(hoverDay, startDate)
-      && isWithinRange(day, startDate, hoverDay)) as boolean;
+  const inHoverRange = (day: Date) =>
+    (startDate &&
+      !endDate &&
+      hoverDay &&
+      isAfter(hoverDay, startDate) &&
+      isWithinInterval(day, {
+        start: startDate,
+        end: hoverDay,
+      })) as boolean;
 
   const helpers = {
     inHoverRange,
@@ -151,7 +154,7 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
     onMonthNavigate,
   };
 
-  return open ? (
+  return (
     <Menu
       dateRange={dateRange}
       minDate={minDateValid}
@@ -162,10 +165,11 @@ const DateRangePicker: React.FunctionComponent<DateRangePickerProps> = (
       setFirstMonth={setFirstMonthValidated}
       setSecondMonth={setSecondMonthValidated}
       setDateRange={setDateRangeValidated}
+      onClose={onClose}
       helpers={helpers}
       handlers={handlers}
     />
-  ) : null;
+  );
 };
 
 export default DateRangePicker;
